@@ -1,3 +1,4 @@
 data/rides_info.csv
 *.nix
 .vscode/
+_build/
