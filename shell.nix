@@ -9,21 +9,24 @@ in pkgs.mkShell rec {
     # A Python interpreter including the 'venv' module is required to bootstrap
     # the environment.
     pythonPackages.python
+    pythonPackages.pip
 
     # This executes some shell code to initialize a venv in $venvDir before
     # dropping into the shell
     pythonPackages.venvShellHook
-
-    # Those are dependencies that we would like to use from nixpkgs, which will
-    # add them to PYTHONPATH and thus make them accessible from within the venv.
     pythonPackages.numpy
     pythonPackages.requests
+    pythonPackages.pre-commit-hooks
 
     # Working with data
     pythonPackages.pandas
     pythonPackages.numpy
     pythonPackages.matplotlib
     pythonPackages.seaborn
+    pythonPackages.kaggle
+    pythonPackages.phik
+    pythonPackages.tqdm
+    pythonPackages.wandb
 
     # Machine Learning
     pythonPackages.scikit-learn
@@ -52,7 +55,13 @@ in pkgs.mkShell rec {
   ];
 
   # Run this command, only after creating the virtual environment
-  postVenvCreation = ''
-    unset SOURCE_DATE_EPOCH
+  shellHook = ''
+      # Tells pip to put packages into $PIP_PREFIX instead of the usual locations.
+      # See https://pip.pypa.io/en/stable/user_guide/#environment-variables.
+      export PIP_PREFIX=$(pwd)/_build/pip_packages
+      export PYTHONPATH="$PIP_PREFIX/${pkgs.python3.sitePackages}:$PYTHONPATH"
+      export PATH="$PIP_PREFIX/bin:$PATH"
+      unset SOURCE_DATE_EPOCH
+      pip install shap boostaroota optuna sweetviz autoviz graphviz featuretools Boruta pyogrio fiona -q
   '';
 }
