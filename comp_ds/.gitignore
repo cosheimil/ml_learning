@@ -1,5 +1,0 @@
-data/rides_info.csv
-*.nix
-.vscode/
-_build/
-tmp_data/
