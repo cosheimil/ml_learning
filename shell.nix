@@ -1,4 +1,4 @@
-with import <nixpkgs> { };
+with import <nixpkgs> { rocmSupport = true; };
 
 let
   pythonPackages = python3Packages;
@@ -33,7 +33,7 @@ in pkgs.mkShell rec {
     pythonPackages.xgboost
     pythonPackages.lightgbm
     pythonPackages.catboost
-    pythonPackages.torch
+    pythonPackages.torch-bin
     pythonPackages.torchvision
     pythonPackages.torchaudio
 
